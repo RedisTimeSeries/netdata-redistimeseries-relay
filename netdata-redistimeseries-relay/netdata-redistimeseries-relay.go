@@ -4,9 +4,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"math"
+
+	//"github.com/timescale/tsbs_generate_queriess/cmd/tsbs_generate_queries/databases/redistimeseries"
+	redistimeseries "github.com/RedisTimeSeries/redistimeseries-go"
 	"net"
 	"net/textproto"
-
 )
 
 type chart_datapoint struct {
@@ -20,13 +23,15 @@ type chart_datapoint struct {
 	labels        interface{} `json:"labels"`
 	name          string      `json:"name"`
 	prefix        string      `json:"prefix"`
-	timestamp     int64       `json:"timestamp"`
+	timestamp     float64     `json:"timestamp"`
 	units         string      `json:"units"`
 	value         float64     `json:"value"`
 }
 
 func server() {
 	// listen on a port
+	var client = redistimeseries.NewClient("localhost:6379", "nohelp", nil)
+
 	ln, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		fmt.Println(err)
@@ -40,43 +45,38 @@ func server() {
 			continue
 		}
 		// handle the connection
-		go handleServerConnection(c)
+		go handleServerConnection(c, client)
 	}
 }
 
-func handleServerConnection(c net.Conn) {
+func handleServerConnection(c net.Conn, client *redistimeseries.Client) {
+	defer c.Close()
+
 	reader := bufio.NewReader(c)
 	tp := textproto.NewReader(reader)
+	//var rcv map[string]interface{}
 	var rcv map[string]interface{}
 
 	defer c.Close()
-	metrics := 0
 	for {
 		// read one line (ended with \n or \r\n)
 		line, _ := tp.ReadLineBytes()
 		tp.ReadLineBytes()
 		json.Unmarshal(line, &rcv)
-
-		//tp.ReadLine()
-		metrics++
-		fmt.Println(rcv)
-		// do something with data here, concat, handle and etc...
+		prefix := rcv["prefix"]
+		chart_type := rcv["chart_type"]
+		chart_family := rcv["chart_family"]
+		chart_name := rcv["chart_name"]
+		hostname := rcv["hostname"]
+		name := rcv["name"]
+		id := rcv["id"]
+		timestamp := int64(math.Round(rcv["timestamp"].(float64)))
+		value := rcv["value"].(float64)
+		//fmt.Println(reflect.TypeOf(timestamp))
+		keyName := fmt.Sprintf("%s:%s:%s:%s:%s:%s:%s", prefix, chart_type, chart_family, chart_name, id, name, hostname)
+		//fmt.Println(keyName, timestamp, value, rcv)
+		client.Add(keyName, timestamp, value)
 	}
-	fmt.Println(metrics)
-	//fmt.Println(metrics)
-
-	// we create a decoder that reads directly from the socket
-	//d := json.NewDecoder(c)
-	//var rcv interface{}
-	//
-	//err := d.Decode(&rcv)
-	//if err == nil {
-	//	fmt.Println(rcv)
-	//
-	//	//file, _ := json.MarshalIndent(rcv, "", " ")
-	//	//_ = ioutil.WriteFile("test.json", file, 0644)
-	//}
-	//c.Close()
 
 }
 
