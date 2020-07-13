@@ -1,5 +1,8 @@
+[![license](https://img.shields.io/github/license/RedisTimeSeries/netdata-redistimeseries-relay.svg)](https://github.com/RedisTimeSeries/netdata-redistimeseries-relay)
 
 # Netdata metrics long term archiving with RedisTimeSeries
+[![Forum](https://img.shields.io/badge/Forum-RedisTimeSeries-blue)](https://forum.redislabs.com/c/modules/redistimeseries)
+[![Gitter](https://badges.gitter.im/RedisLabs/RedisTimeSeries.svg)](https://gitter.im/RedisLabs/RedisTimeSeries?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Netdata supports  interoperability with other monitoring and visualization solutions for archiving the metrics, or providing long term dashboards, using Grafana or other tools, like it.  To this end, you can use Netdata Agent's exporting engine to send metrics to multiple external databases/services in parallel.
 
