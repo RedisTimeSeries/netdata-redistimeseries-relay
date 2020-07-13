@@ -1,4 +1,4 @@
-[![license](https://img.shields.io/github/license/RedisTimeSeries/netdata-redistimeseries-relay.svg)](https://github.com/RedisTimeSeries/netdata-redistimeseries-relay)
+[![license](https://img.shields.io/github/license/RedisTimeSeries/netdata-redistimeseries-relay.svg)](https://github.com/RedisTimeSeries/netdata-redistimeseries-relay/blob/master/LICENSE)
 
 # Netdata metrics long term archiving with RedisTimeSeries
 [![Forum](https://img.shields.io/badge/Forum-RedisTimeSeries-blue)](https://forum.redislabs.com/c/modules/redistimeseries)
