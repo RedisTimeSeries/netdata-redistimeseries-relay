@@ -71,8 +71,8 @@ Add a new section to exporting.confnamed [json:redistimeseries]with the followin
 The easiest way to get and install netdata-redistimeseries-relay is to use go get and then issuing make:
 ```
 # Fetch netdata-redistimeseries-relay and its dependencies
-go get github.com/filipecosta90/netdata-redistimeseries-relay
-cd $GOPATH/src/github.com/filipecosta90/netdata-redistimeseries-relay
+go get github.com/RedisTimeSeries/netdata-redistimeseries-relay
+cd $GOPATH/src/github.com/RedisTimeSeries/netdata-redistimeseries-relay
 
 # Install netdata-redistimeseries-relay binary:
 make
